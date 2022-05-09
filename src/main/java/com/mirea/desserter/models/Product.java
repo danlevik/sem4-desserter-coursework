@@ -21,7 +21,7 @@ public class Product {
     @Column(name = "type_id")
     private int typeId;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "product_name", nullable = false)
     private String name;
 
     @Column(name = "price")
@@ -29,6 +29,9 @@ public class Product {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "cover_link")
+    private String coverLink;
 
     @Override
     public String toString() {

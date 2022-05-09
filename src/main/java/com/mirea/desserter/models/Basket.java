@@ -21,8 +21,11 @@ public class Basket {
     @Column(name = "user_id")
     private int userId;
 
-    @Column(name = "count")
+    @Column(name = "product_id")
     private int productId;
+
+    @Column(name = "product_count")
+    private int productCount;
 
     @Override
     public String toString() {
@@ -30,6 +33,7 @@ public class Basket {
                 "id=" + id +
                 ", userId=" + userId +
                 ", productId=" + productId +
+                ", productCount=" + productCount +
                 '}';
     }
 }

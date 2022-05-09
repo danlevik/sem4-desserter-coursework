@@ -1,38 +1,73 @@
 package com.mirea.desserter.models;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User implements UserDetails{
+
+    /**
+     * Идентификатор пользователя
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String username, password;
-    private boolean active;
+    private int id;
+    /**
+     * Имя пользователя
+     */
+    @Column(name = "username")
+    private String username;
+    /**
+     * Пароль пользователя
+     */
+    @Column(name = "password")
+    private String password;
+    /**
+     * РОль пользователя
+     */
+    @Column(name = "role")
+    private String role;
 
-    public User() {
+    /**
+     * Переопределенный метод ToString() - строковое представление данных
+     *
+     * @return Возращает информацию о пользователе в строковом формате
+     */
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name="user_role", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated
-    private Set<Role> roles;
-
-    public Long getId() {
-        return id;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority(role));
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @Override
+    public String getPassword() {
+        return password;
     }
 
-    public String getUsername() {
+    @Override
+    public String getUsername(){
         return username;
     }
 
@@ -53,39 +88,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return isActive();
+        return true;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
 }
