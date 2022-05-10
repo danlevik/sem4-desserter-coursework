@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 public class MainController {
 
@@ -28,8 +30,10 @@ public class MainController {
         model.addAttribute("types", typeRepo.findAll());
         model.addAttribute("typeId", typeId);
 
+        Iterable<Product> products = productRepo.findAll();
+
         if (typeId == null) {
-            model.addAttribute("products", productRepo.findAll());
+            model.addAttribute("products", products);
         }
         else{
             model.addAttribute("products", productRepo.findAllByTypeId(typeId));
@@ -50,4 +54,5 @@ public class MainController {
 
         return "product";
     }
+
 }
