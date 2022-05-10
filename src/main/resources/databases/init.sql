@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS products
 (
     id SERIAL PRIMARY KEY ,
     type_id bigint unsigned NOT NULL,
-    name TEXT NOT NULL ,
+    product_name TEXT NOT NULL ,
     price INTEGER ,
     description TEXT ,
     cover_link TEXT,

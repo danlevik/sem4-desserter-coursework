@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Кондитерская</title>
+    <link th:href="@{css/style.css}" rel="stylesheet" />
 </head>
 <body>
 
 <div class="products_container">
     <div th:each="product : ${products}" class="product_card">
-        <a th:href="'/products/' + ${product.getId()}"><img th:src="${product.coverLink}" onerror="this.src='img/no-cover.gif'" height="300px" width="200px"></a>
+        <a th:href="'/products/' + ${product.getId()}"><img th:src="${product.getCoverLink()}" onerror="this.src='img/no-cover.gif'" height="300px" width="200px"></a>
         <p th:text="${product.getName()}"/>
     </div>
 </div>
