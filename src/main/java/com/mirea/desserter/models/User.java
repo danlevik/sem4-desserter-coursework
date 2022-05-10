@@ -13,9 +13,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-@Getter
-@Setter
-@NoArgsConstructor
+
 @Entity
 @Table(name = "users")
 public class User implements UserDetails{
@@ -59,6 +57,30 @@ public class User implements UserDetails{
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(role));
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getRole() {
+        return role;
     }
 
     @Override
