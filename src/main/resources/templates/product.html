@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Товар</title>
+</head>
+<body>
+<div class="wrapper">
+    <div class="box1">
+        <div class="book_card">
+            <img th:src="${product.getCoverLink()}" height="300px" width="200px">
+            <p th:text="${product.getName()}"/>
+            <p th:text="${product_type.getName()}" />
+            <p th:text="${product.getPrice()}"/>
+        </div>
+    </div>
+    <div class="box2">
+        <div class="product_description">
+            <p th:text="${product.getDescription()}" />
+        </div>
+    </div>
+</body>
+</html>

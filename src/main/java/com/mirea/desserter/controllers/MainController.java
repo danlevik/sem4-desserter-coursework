@@ -1,10 +1,15 @@
 package com.mirea.desserter.controllers;
 
+import com.mirea.desserter.models.Basket;
 import com.mirea.desserter.models.Product;
+import com.mirea.desserter.models.Type;
+import com.mirea.desserter.models.User;
+import com.mirea.desserter.repos.IBasketRepo;
 import com.mirea.desserter.repos.IProductRepo;
 import com.mirea.desserter.repos.ITypeRepo;
 import com.mirea.desserter.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +32,9 @@ public class MainController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private IBasketRepo basketRepo;
 
 
     @GetMapping("/products")
@@ -57,9 +65,54 @@ public class MainController {
         Product product = productRepo.findById(id);
 
         model.addAttribute("product", product);
+        model.addAttribute("product_type", typeRepo.findById(product.getTypeId()));
         model.addAttribute("types", typeRepo.findAll());
 
         return "product";
+    }
+
+    @PostMapping("/products/{id}")
+    public String addProductToBasket(
+            Authentication authentication,
+            @PathVariable(value = "id") int productId,
+            Model model
+            ) {
+        String userRole = getUserRole(authentication);
+
+        if (userRole.equals("GUEST")) {
+            return "redirect:/products/" + productId;
+        }
+        else {
+            int userId = getUserId(authentication);
+            Basket basket = basketRepo.findByUserIdAndProductId(userId, productId);
+            if (basket == null){
+                Basket newBasket = new Basket();
+                newBasket.setUserId(userId);
+                newBasket.setProductId(productId);
+                newBasket.setProductCount(1);
+                basketRepo.save(newBasket);
+                return "redirect:/products/" + productId;
+            }
+            else{
+                basket.setProductCount(basket.getProductCount() + 1);
+                basketRepo.save(basket);
+                return "redirect:/products/" + productId;
+            }
+        }
+    }
+
+    private int getUserId(Authentication authentication) {
+        if (authentication == null)
+            return 0;
+        else
+            return ((User)userService.loadUserByUsername(authentication.getName())).getId();
+    }
+
+    private String getUserRole(Authentication authentication) {
+        if (authentication == null)
+            return "GUEST";
+        else
+            return ((User)userService.loadUserByUsername(authentication.getName())).getRole();
     }
 
 

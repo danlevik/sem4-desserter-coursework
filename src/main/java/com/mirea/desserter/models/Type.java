@@ -6,9 +6,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
 @Entity
 @Table(name = "types")
 public class Type {
@@ -19,6 +16,25 @@ public class Type {
 
     @Column(name = "type_name", nullable = false)
     private String name;
+
+    public Type() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @Override
     public String toString() {
