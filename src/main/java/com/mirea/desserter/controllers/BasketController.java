@@ -11,7 +11,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -56,5 +58,29 @@ public class BasketController {
         return "basket";
     }
 
+    @PostMapping("/basketDeletePurchase")
+    public String deletePurchase(@RequestParam(value = "delButton") int purchaseId){
+        basketRepo.deleteById(purchaseId);
+        return "redirect:/basket";
+    }
+
+    @PostMapping("/basketIncrPurchase")
+    public String increasePurchase(@RequestParam(value = "incrButton") int purchaseId){
+        Basket purchase = basketRepo.findById(purchaseId);
+        purchase.setProductCount(purchase.getProductCount() + 1);
+        basketRepo.save(purchase);
+        return "redirect:/basket";
+    }
+
+    @PostMapping("/basketDecrPurchase")
+    public String decreasePurchase(@RequestParam(value = "decrButton") int purchaseId){
+        Basket purchase = basketRepo.findById(purchaseId);
+        purchase.setProductCount(purchase.getProductCount() - 1);
+        basketRepo.save(purchase);
+        if (purchase.getProductCount() <= 0){
+            basketRepo.delete(purchase);
+        }
+        return "redirect:/basket";
+    }
 
 }

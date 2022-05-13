@@ -6,7 +6,7 @@
     <link th:href="@{css/style.css}" rel="stylesheet" />
 </head>
 <body>
-
+<li th:each="type : ${types}"><a th:href="@{/products(typeId=${type.getId()})}" th:text="${type.getName()}">TEXT</a></li>
 <div class="products_container">
     <div th:each="product : ${products}" class="product_card">
         <a th:href="'/products/' + ${product.getId()}"><img th:src="${product.getCoverLink()}" onerror="this.src='img/no-cover.gif'" height="300px" width="200px"></a>

@@ -10,6 +10,16 @@
     <div th:each="purchase : ${basket}" class="product_card">
         <a th:href="'/products/' + ${purchase.getProductId()}"><img th:src="${productRepo.findById(purchase.getProductId()).getCoverLink()}" onerror="this.src='img/no-cover.gif'" height="300px" width="200px"></a>
         <p th:text="${productRepo.findById(purchase.getProductId()).getName()}"/>
+        <p th:text="'Количество: ' + ${purchase.getProductCount()}"/>
+        <form th:method="POST" th:action="@{/basketDeletePurchase}">
+            <button name="delButton" th:value="${purchase.getId}">X</button>
+        </form>
+        <form th:method="POST" th:action="@{/basketIncrPurchase}">
+            <button name="incrButton" th:value="${purchase.getId}">+</button>
+        </form>
+        <form th:method="POST" th:action="@{/basketDecrPurchase}">
+            <button name="decrButton" th:value="${purchase.getId}">-</button>
+        </form>
     </div>
 </div>
 </body>
