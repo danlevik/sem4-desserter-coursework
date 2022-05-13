@@ -37,6 +37,20 @@ public class MainController {
     private IBasketRepo basketRepo;
 
 
+    private int getUserId(Authentication authentication) {
+        if (authentication == null)
+            return 0;
+        else
+            return ((User)userService.loadUserByUsername(authentication.getName())).getId();
+    }
+
+    private String getUserRole(Authentication authentication) {
+        if (authentication == null)
+            return "GUEST";
+        else
+            return ((User)userService.loadUserByUsername(authentication.getName())).getRole();
+    }
+
     @GetMapping("/products")
     public String productsPage(
             @RequestParam(name = "typeId", required = false) Integer typeId,
@@ -65,6 +79,7 @@ public class MainController {
         Product product = productRepo.findById(id);
 
         model.addAttribute("product", product);
+        model.addAttribute("productId", id);
         model.addAttribute("product_type", typeRepo.findById(product.getTypeId()));
         model.addAttribute("types", typeRepo.findAll());
 
@@ -99,20 +114,6 @@ public class MainController {
                 return "redirect:/products/" + productId;
             }
         }
-    }
-
-    private int getUserId(Authentication authentication) {
-        if (authentication == null)
-            return 0;
-        else
-            return ((User)userService.loadUserByUsername(authentication.getName())).getId();
-    }
-
-    private String getUserRole(Authentication authentication) {
-        if (authentication == null)
-            return "GUEST";
-        else
-            return ((User)userService.loadUserByUsername(authentication.getName())).getRole();
     }
 
 

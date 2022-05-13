@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Товар</title>
+    <link th:href="@{css/style.css}" rel="stylesheet" />
 </head>
 <body>
 <div class="wrapper">
     <div class="box1">
-        <div class="book_card">
+        <div class="product_card">
             <img th:src="${product.getCoverLink()}" height="300px" width="200px">
             <p th:text="${product.getName()}"/>
             <p th:text="${product_type.getName()}" />
@@ -18,6 +19,11 @@
         <div class="product_description">
             <p th:text="${product.getDescription()}" />
         </div>
+    </div>
+    <div>
+        <form th:method="POST" th:action="@{/products/{id}(id=${productId})}">
+            <button type="submit">Добавить в корзину</button>
+        </form>
     </div>
 </body>
 </html>

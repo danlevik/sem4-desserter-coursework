@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Корзина</title>
+    <link th:href="@{css/style.css}" rel="stylesheet" />
+</head>
+<body>
+<div class="products_container">
+    <div th:each="purchase : ${basket}" class="product_card">
+        <a th:href="'/products/' + ${purchase.getProductId()}"><img th:src="${productRepo.findById(purchase.getProductId()).getCoverLink()}" onerror="this.src='img/no-cover.gif'" height="300px" width="200px"></a>
+        <p th:text="${productRepo.findById(purchase.getProductId()).getName()}"/>
+    </div>
+</div>
+</body>
+</html>
