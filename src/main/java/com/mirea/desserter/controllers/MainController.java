@@ -7,6 +7,9 @@ import com.mirea.desserter.models.User;
 import com.mirea.desserter.repos.IBasketRepo;
 import com.mirea.desserter.repos.IProductRepo;
 import com.mirea.desserter.repos.ITypeRepo;
+import com.mirea.desserter.services.BasketService;
+import com.mirea.desserter.services.ProductService;
+import com.mirea.desserter.services.TypeService;
 import com.mirea.desserter.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -25,16 +28,16 @@ import java.util.List;
 public class MainController {
 
     @Autowired
-    private IProductRepo productRepo;
+    private ProductService productService;
 
     @Autowired
-    private ITypeRepo typeRepo;
+    private TypeService typeService;
 
     @Autowired
     private UserService userService;
 
     @Autowired
-    private IBasketRepo basketRepo;
+    private BasketService basketService;
 
 
     private int getUserId(Authentication authentication) {
@@ -56,16 +59,16 @@ public class MainController {
             @RequestParam(name = "typeId", required = false) Integer typeId,
             Model model){
 
-        model.addAttribute("types", typeRepo.findAll());
+        model.addAttribute("types", typeService.getAllTypes());
         model.addAttribute("typeId", typeId);
 
-        Iterable<Product> products = productRepo.findAll();
+        Iterable<Product> products = productService.getAllProducts();
 
         if (typeId == null) {
             model.addAttribute("products", products);
         }
         else{
-            model.addAttribute("products", productRepo.findAllByTypeId(typeId));
+            model.addAttribute("products", productService.getAllProductsByTypeId(typeId));
         }
 
         return "products";
@@ -76,12 +79,12 @@ public class MainController {
             @PathVariable(value="id") int id,
             Model model){
 
-        Product product = productRepo.findById(id);
+        Product product = productService.getProductById(id);
 
         model.addAttribute("product", product);
         model.addAttribute("productId", id);
-        model.addAttribute("product_type", typeRepo.findById(product.getTypeId()));
-        model.addAttribute("types", typeRepo.findAll());
+        model.addAttribute("product_type", typeService.getTypeById(product.getTypeId()));
+        model.addAttribute("types", typeService.getAllTypes());
 
         return "product";
     }
@@ -99,18 +102,18 @@ public class MainController {
         }
         else {
             int userId = getUserId(authentication);
-            Basket basket = basketRepo.findByUserIdAndProductId(userId, productId);
+            Basket basket = basketService.getPurchaseByUserIdAndProductId(userId, productId);
             if (basket == null){
                 Basket newBasket = new Basket();
                 newBasket.setUserId(userId);
                 newBasket.setProductId(productId);
                 newBasket.setProductCount(1);
-                basketRepo.save(newBasket);
+                basketService.savePurchase(newBasket);
                 return "redirect:/products/" + productId;
             }
             else{
                 basket.setProductCount(basket.getProductCount() + 1);
-                basketRepo.save(basket);
+                basketService.savePurchase(basket);
                 return "redirect:/products/" + productId;
             }
         }

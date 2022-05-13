@@ -8,8 +8,8 @@
 <body>
 <div class="products_container">
     <div th:each="purchase : ${basket}" class="product_card">
-        <a th:href="'/products/' + ${purchase.getProductId()}"><img th:src="${productRepo.findById(purchase.getProductId()).getCoverLink()}" onerror="this.src='img/no-cover.gif'" height="300px" width="200px"></a>
-        <p th:text="${productRepo.findById(purchase.getProductId()).getName()}"/>
+        <a th:href="'/products/' + ${purchase.getProductId()}"><img th:src="${productService.getProductById(purchase.getProductId()).getCoverLink()}" onerror="this.src='img/no-cover.gif'" height="300px" width="200px"></a>
+        <p th:text="${productService.getProductById(purchase.getProductId()).getName()}"/>
         <p th:text="'Количество: ' + ${purchase.getProductCount()}"/>
         <form th:method="POST" th:action="@{/basketDeletePurchase}">
             <button name="delButton" th:value="${purchase.getId}">X</button>

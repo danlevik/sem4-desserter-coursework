@@ -5,6 +5,9 @@ import com.mirea.desserter.models.User;
 import com.mirea.desserter.repos.IBasketRepo;
 import com.mirea.desserter.repos.IProductRepo;
 import com.mirea.desserter.repos.ITypeRepo;
+import com.mirea.desserter.services.BasketService;
+import com.mirea.desserter.services.ProductService;
+import com.mirea.desserter.services.TypeService;
 import com.mirea.desserter.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,22 +25,22 @@ import java.util.List;
 public class BasketController {
 
     @Autowired
-    private IProductRepo productRepo;
+    private ProductService productService;
 
     @Autowired
-    private ITypeRepo typeRepo;
+    private TypeService typeService;
 
     @Autowired
     private UserService userService;
 
     @Autowired
-    private IBasketRepo basketRepo;
+    private BasketService basketService;
 
 
     private int getBasketPrice(List<Basket> purchases) {
         int total = 0;
         for (Basket basket: purchases){
-            total += productRepo.findById(basket.getProductId()).getPrice() * basket.getProductCount();
+            total += productService.getProductById(basket.getProductId()).getPrice() * basket.getProductCount();
         }
         return total;
     }
@@ -47,38 +50,38 @@ public class BasketController {
                          @AuthenticationPrincipal User user){
 
         int userId = user.getId();
-        model.addAttribute("basketPrice", getBasketPrice(basketRepo.findAllByUserId(userId)));
-        model.addAttribute("types", typeRepo.findAll());
+        model.addAttribute("basketPrice", getBasketPrice(basketService.getPurchasesByUserId(userId)));
+        model.addAttribute("types", typeService.getAllTypes());
 
-        List<Basket> purchases = basketRepo.findAllByUserId(userId);
+        List<Basket> purchases = basketService.getPurchasesByUserId(userId);
 
         model.addAttribute("basket", purchases);
-        model.addAttribute("productRepo", productRepo);
+        model.addAttribute("productService", productService);
 
         return "basket";
     }
 
     @PostMapping("/basketDeletePurchase")
     public String deletePurchase(@RequestParam(value = "delButton") int purchaseId){
-        basketRepo.deleteById(purchaseId);
+        basketService.deletePurchaseById(purchaseId);
         return "redirect:/basket";
     }
 
     @PostMapping("/basketIncrPurchase")
     public String increasePurchase(@RequestParam(value = "incrButton") int purchaseId){
-        Basket purchase = basketRepo.findById(purchaseId);
+        Basket purchase = basketService.getPurchaseById(purchaseId);
         purchase.setProductCount(purchase.getProductCount() + 1);
-        basketRepo.save(purchase);
+        basketService.savePurchase(purchase);
         return "redirect:/basket";
     }
 
     @PostMapping("/basketDecrPurchase")
     public String decreasePurchase(@RequestParam(value = "decrButton") int purchaseId){
-        Basket purchase = basketRepo.findById(purchaseId);
+        Basket purchase = basketService.getPurchaseById(purchaseId);
         purchase.setProductCount(purchase.getProductCount() - 1);
-        basketRepo.save(purchase);
+        basketService.savePurchase(purchase);
         if (purchase.getProductCount() <= 0){
-            basketRepo.delete(purchase);
+            basketService.deletePurchase(purchase);
         }
         return "redirect:/basket";
     }
