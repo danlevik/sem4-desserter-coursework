@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель модератора</title>
+    <link href="../static/css/style.css" th:href="@{css/style.css}" rel="stylesheet" />
+</head>
+<body>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">TypeId</th>
+        <th scope="col">Name</th>
+        <th scope="col">Price</th>
+        <th scope="col">Description</th>
+        <th scope="col">CoverLink</th>
+        <th scope="col">Удалить</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product: ${products}" th:method="POST">
+        <th scope="row" th:text="${product.getId()}">ID</th>
+        <td th:text="${product.getTypeId()}">TYPEID</td>
+        <td th:text="${product.getName()}">NAME</td>
+        <td th:text="${product.getPrice()}">PRICE</td>
+        <td th:text="${product.getDescription()}">DESCRIPTION</td>
+        <td th:text="${product.getCoverLink()}">COVERLINK</td>
+        <td>
+            <form th:method="POST" th:action="@{/admin/delete}">
+                <input type="hidden" name="id" th:value="${product.getId()}">
+                <button type="submit">Удалить</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<form th:method="POST" th:action="@{/admin/create}">
+    <input type="text" name="typeId" placeholder="1"><br><br>
+    <input type="text" name="name" placeholder="Наименование"><br><br>
+    <input type="text" name="price" placeholder="Цена"><br><br>
+    <input type="text" name="description" placeholder="Описание"><br><br>
+    <input type="text" name="coverLink" placeholder="Ссылка на изображение"><br><br>
+    <button type="submit">Создать</button>
+</form>
+
+</body>
+</html>
