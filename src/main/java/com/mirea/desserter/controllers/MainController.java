@@ -13,6 +13,7 @@ import com.mirea.desserter.services.TypeService;
 import com.mirea.desserter.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,11 +55,13 @@ public class MainController {
             return ((User)userService.loadUserByUsername(authentication.getName())).getRole();
     }
 
-    @GetMapping("/products")
+    @GetMapping("/")
     public String productsPage(
+            @AuthenticationPrincipal User user,
             @RequestParam(name = "typeId", required = false) Integer typeId,
             Model model){
 
+        model.addAttribute("authority", user.getAuthorities().toString());
         model.addAttribute("types", typeService.getAllTypes());
         model.addAttribute("typeId", typeId);
 
