@@ -3,12 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <title>Кондитерская</title>
-    <link th:href="@{css/style.css}" rel="stylesheet" />
+    <link href="../static/css/style.css" th:href="@{css/style.css}" rel="stylesheet" />
+    <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
 </head>
 <body>
-<li th:each="type : ${types}"><a th:href="@{/products(typeId=${type.getId()})}" th:text="${type.getName()}">TEXT</a></li>
-<div class="products_container">
-    <div th:each="product : ${products}" class="product_card">
+
+<header>
+    <a th:href="@{/}"><img src="img/logo.png" alt="logo" width="100px" height="100px"></a>
+    <nav>
+        <!--        <a th:href="@{/}">Каталог</a>-->
+        <!--        <a th:href="@{/basket}">Корзина</a>-->
+        <form th:action="@{/}">
+            <input type="submit" value="Товары"/>
+        </form>
+        <form th:action="@{/basket}">
+            <input type="submit" value="Корзина"/>
+        </form>
+        <form th:if="(${authority}=='[ADMIN]')" th:action="@{/admin}">
+            <input type="submit" value="Админ-панель"/>
+        </form>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Выйти"/>
+        </form>
+    </nav>
+</header>
+
+<div id="type_names">
+    <p th:each="type : ${types}">
+        <a class="sample" th:href="@{/(typeId=${type.getId()})}"
+           th:text="${type.getName()}">TEXT</a>
+    </p>
+</div>
+<div class="product_container">
+    <div class="product_card" th:each="product : ${products}">
         <a th:href="'/products/' + ${product.getId()}"><img th:src="${product.getCoverLink()}" onerror="this.src='img/no-cover.gif'" height="300px" width="200px"></a>
         <p th:text="${product.getName()}"/>
     </div>

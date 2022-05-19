@@ -4,23 +4,51 @@
     <meta charset="UTF-8">
     <title>Корзина</title>
     <link th:href="@{css/style.css}" rel="stylesheet" />
+    <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
 </head>
 <body>
-<div class="products_container">
-    <div th:each="purchase : ${basket}" class="product_card">
-        <a th:href="'/products/' + ${purchase.getProductId()}"><img th:src="${productService.getProductById(purchase.getProductId()).getCoverLink()}" onerror="this.src='img/no-cover.gif'" height="300px" width="200px"></a>
+
+<header>
+    <a th:href="@{/}"><img src="img/logo.png" alt="logo" width="100px" height="100px"></a>
+    <nav>
+        <form th:action="@{/}">
+            <input type="submit" value="Товары"/>
+        </form>
+        <form th:action="@{/basket}">
+            <input type="submit" value="Корзина"/>
+        </form>
+        <form th:if="(${authority}=='[ADMIN]')" th:action="@{/admin}">
+            <input type="submit" value="Админ-панель"/>
+        </form>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Выйти"/>
+        </form>
+    </nav>
+</header>
+
+<p class="basket_list">КОРЗИНА:</p>
+
+<div class="basket_container">
+    <div th:each="purchase : ${basket}" class="basket_card">
+        <a th:href="'/products/' + ${purchase.getProductId()}"><img th:src="${productService.getProductById(purchase.getProductId()).getCoverLink()}" onerror="this.src='img/no-cover.gif'" width="50px" height="50px"></a>
         <p th:text="${productService.getProductById(purchase.getProductId()).getName()}"/>
+        <p th:text="'Цена: ' + ${productService.getProductById(purchase.getProductId()).getPrice()} + '₽'"/>
         <p th:text="'Количество: ' + ${purchase.getProductCount()}"/>
-        <form th:method="POST" th:action="@{/basketDeletePurchase}">
-            <button name="delButton" th:value="${purchase.getId}">X</button>
-        </form>
-        <form th:method="POST" th:action="@{/basketIncrPurchase}">
-            <button name="incrButton" th:value="${purchase.getId}">+</button>
-        </form>
-        <form th:method="POST" th:action="@{/basketDecrPurchase}">
-            <button name="decrButton" th:value="${purchase.getId}">-</button>
-        </form>
+        <p th:text="'Стоимость: ' + ${purchase.getProductCount() * productService.getProductById(purchase.getProductId()).getPrice()} + '₽'"/>
+        <div class="basket_buttons_container">
+            <form th:method="POST" th:action="@{/basketDeletePurchase}">
+                <button name="delButton" th:value="${purchase.getId}">X</button>
+            </form>
+            <form th:method="POST" th:action="@{/basketIncrPurchase}">
+                <button name="incrButton" th:value="${purchase.getId}">+</button>
+            </form>
+            <form th:method="POST" th:action="@{/basketDecrPurchase}">
+                <button name="decrButton" th:value="${purchase.getId}">-</button>
+            </form>
+        </div>
     </div>
+    <p th:text="'Итого: ' + ${basketPrice} + '₽'" class="basket_list"></p>
+    <input type="submit" value="Оформить заказ">
 </div>
 </body>
 </html>

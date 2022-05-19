@@ -1,6 +1,10 @@
-/* p { */
-/*  */
-/* } */
+p{
+    font-family: "Lucida Sans Typewriter";
+}
+
+body{
+    background: snow;
+}
 
 header {
     display: flex;
@@ -9,7 +13,7 @@ header {
     align-items: center;
 
     border: 1px solid;
-    border-color: rgb(213,218,222);
+    border-color: rgb(213, 218, 222);
     margin-top: -10px;
     margin-left: -10px;
     margin-right: -10px;
@@ -18,34 +22,40 @@ header {
     /* position: fixed; */
     /* width: 100%; */
     /* z-index: 100; */
+    background-color: #f4d6a7;
+    /* background: linear-gradient(to right bottom, #ffecd266, #fcb69f54); */
 
 }
 
 header img {
     position: relative;
-    right: 130%;
+    right: 50%;
+    height: 80px;
+    padding: 10px;
+    width: auto;
 }
 
 nav {
-    font-family: Georgia, serif;
     position: relative;
-    left: 15%;
+    left: 5%;
 }
 
 nav a {
-	color: #132a13;
-	padding:15px 30px;
-	text-decoration: none;
+    color: #132a13;
+    padding: 15px 30px;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 4px;
 }
 
-nav a:hover {
+nav a:hover, #type_names a:hover {
     border-radius: 5px;
-    background:rgb(213,218,222);
-	color: #000000;
+    background: #a18072;
+    color: #ffe9c0;
 }
 
 .product_card {
-    padding: 50px;
+    padding: 15px 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -53,22 +63,91 @@ nav a:hover {
 }
 
 .product_card p {
-    font-weight: bold;
+    /* padding: 0px; */
+    margin: 0px;
 }
 
 .product_card a :hover {
+    /* box-shadow: 0px 0px 21px 6px rgba(34, 60, 80, 0.6);*/
+    /* border: solid 2px; */
+    /* border-color: red; */
+
+}
+
+.product_card img {
+    height: 280px;
+    width: 280px;
+
+}
+
+.product_container {
+    padding: 40px 0px;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.basket_list {
+    font-size: 20px;
+    /* font-weight: 700; */
+    letter-spacing: 3px;
+    text-align: center;
+    margin: 50px 0px;
+    border-width: 1px;
+}
+
+.basket_container {
+    border-width: 1px;
+    border-style: solid none none none;
+    position: absolute;
+    left: 10vw;
+    width: 80vw;
+    padding: 0px;
+    /* display: inline-flex; */
+    display: flex;
+    flex-direction: column;
+    /* width: auto; */
+    /* flex-wrap: wrap; */
+}
+
+.basket_card {
+    /* width: 40vw; */
+    padding: 15px 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-width: 1px;
+    border-style: none none solid none;
+    justify-content: center;
+    /* background-color: aquamarine; */
+}
+
+.basket_card p {
+    font-family: "Lucida Sans Typewriter";
+    margin: 10px;
+    /* padding: 0px; */
+    /* margin: 0px; */
+}
+
+.basket_card a :hover {
     box-shadow: 0px 0px 21px 6px rgba(34, 60, 80, 0.6);
     /* border: solid 2px; */
     /* border-color: red; */
 
 }
 
-.products_container {
-    padding: 5px;
+.basket_card img {
+    height: 100px;
+    width: 100px;
+
+}
+
+.basket_buttons_container {
     display: flex;
-    justify-content: space-around;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    margin: 5px;
 }
 
 .registration_card {
@@ -76,13 +155,18 @@ nav a:hover {
     height: 50%;
     margin-top: 2%;
     margin-left: 25%;
-    border: solid 2px rgb(213,218,222);
+    border: solid 2px rgb(213, 218, 222);
     display: flex;
     justify-content: space-around;
     flex-direction: column;
     align-items: center;
     padding: 10px;
     box-shadow: 0px 0px 13px 6px rgba(34, 60, 80, 0.23);
+}
+
+#regtext {
+
+    text-transform: uppercase;
 }
 
 .wrapper {
@@ -100,7 +184,7 @@ nav a:hover {
     /* background-color: yellow; */
     display: flex;
     justify-content: space-around;
-    
+
 }
 
 .box1 img {
@@ -117,10 +201,10 @@ nav a:hover {
 
 .product_description {
     border: solid 2px;
-    border-color: rgb(213,218,222);
+    border-color: rgb(213, 218, 222);
     display: flex;
     justify-content: space-around;
-    
+
     /* align-items: center; */
     width: 90%;
     height: 390px;
@@ -143,30 +227,37 @@ nav a:hover {
     /* background-color: purple; */
 }
 
-.user_header {
-    position: relative;
-    right: -15%;
-}
 
-.user_header a {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    position: relative;
-    right: -15%;
+input[type=button], input[type=submit] {
+    background-color: #654444;
+    border: none;
+    color: #ffe9c0;
+    padding: 16px 32px;
     text-decoration: none;
-	color: #132a13;
-    padding: 5px 15px;
+    margin: 4px 20px;
+    letter-spacing: 2px;
+    cursor: pointer;
 }
 
-.user_header img {
-    position: relative;
-    right: 0%;
-    padding-right: 10px;
+
+form {
+    display: inline;
 }
 
-.user_header :hover {
-    border-radius: 5px;
-    background:rgb(213,218,222);
-	color: #000000;
+.sample {
+    color: #132a13;
+    padding: 15px 30px;
+    text-decoration: none;
+    letter-spacing: 2px;
+    text-align: center;
+
+}
+
+#type_names {
+    margin-top: 15px;
+    margin-bottom: -30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
 }
