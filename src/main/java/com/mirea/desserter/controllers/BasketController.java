@@ -37,20 +37,14 @@ public class BasketController {
     private BasketService basketService;
 
 
-    private int getBasketPrice(List<Basket> purchases) {
-        int total = 0;
-        for (Basket basket: purchases){
-            total += productService.getProductById(basket.getProductId()).getPrice() * basket.getProductCount();
-        }
-        return total;
-    }
-
     @GetMapping("/basket")
     public String basket(Model model,
                          @AuthenticationPrincipal User user){
 
         int userId = user.getId();
-        model.addAttribute("basketPrice", getBasketPrice(basketService.getPurchasesByUserId(userId)));
+
+        model.addAttribute("authority", user.getAuthorities().toString());
+        model.addAttribute("basketPrice", productService.getBasketPrice(basketService.getPurchasesByUserId(userId)));
         model.addAttribute("types", typeService.getAllTypes());
 
         List<Basket> purchases = basketService.getPurchasesByUserId(userId);

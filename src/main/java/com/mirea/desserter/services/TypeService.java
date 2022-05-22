@@ -2,14 +2,12 @@ package com.mirea.desserter.services;
 
 import com.mirea.desserter.models.Type;
 import com.mirea.desserter.repos.ITypeRepo;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class TypeService {
 
     private ITypeRepo typeRepo;

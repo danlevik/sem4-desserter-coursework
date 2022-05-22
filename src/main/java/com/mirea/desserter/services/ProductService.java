@@ -1,6 +1,7 @@
 package com.mirea.desserter.services;
 
 
+import com.mirea.desserter.models.Basket;
 import com.mirea.desserter.models.Product;
 import com.mirea.desserter.repos.IProductRepo;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,14 @@ public class ProductService {
     @Autowired
     public ProductService(IProductRepo productRepo){
         this.productRepo = productRepo;
+    }
+
+    public int getBasketPrice(List<Basket> purchases) {
+        int total = 0;
+        for (Basket basket: purchases){
+            total += getProductById(basket.getProductId()).getPrice() * basket.getProductCount();
+        }
+        return total;
     }
 
     public List<Product> getAllProducts(){

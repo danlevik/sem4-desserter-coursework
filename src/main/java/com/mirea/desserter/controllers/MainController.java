@@ -2,11 +2,7 @@ package com.mirea.desserter.controllers;
 
 import com.mirea.desserter.models.Basket;
 import com.mirea.desserter.models.Product;
-import com.mirea.desserter.models.Type;
 import com.mirea.desserter.models.User;
-import com.mirea.desserter.repos.IBasketRepo;
-import com.mirea.desserter.repos.IProductRepo;
-import com.mirea.desserter.repos.ITypeRepo;
 import com.mirea.desserter.services.BasketService;
 import com.mirea.desserter.services.ProductService;
 import com.mirea.desserter.services.TypeService;
@@ -23,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 public class MainController {
@@ -41,19 +36,6 @@ public class MainController {
     private BasketService basketService;
 
 
-    private int getUserId(Authentication authentication) {
-        if (authentication == null)
-            return 0;
-        else
-            return ((User)userService.loadUserByUsername(authentication.getName())).getId();
-    }
-
-    private String getUserRole(Authentication authentication) {
-        if (authentication == null)
-            return "GUEST";
-        else
-            return ((User)userService.loadUserByUsername(authentication.getName())).getRole();
-    }
 
     @GetMapping("/")
     public String productsPage(
@@ -79,10 +61,13 @@ public class MainController {
 
     @GetMapping("/products/{id}")
     public String productPage(
+            @AuthenticationPrincipal User user,
             @PathVariable(value="id") int id,
             Model model){
 
         Product product = productService.getProductById(id);
+
+        model.addAttribute("authority", user.getAuthorities().toString());
 
         model.addAttribute("product", product);
         model.addAttribute("productId", id);
@@ -98,13 +83,13 @@ public class MainController {
             @PathVariable(value = "id") int productId,
             Model model
             ) {
-        String userRole = getUserRole(authentication);
+        String userRole = userService.getUserRole(authentication);
 
         if (userRole.equals("GUEST")) {
             return "redirect:/products/" + productId;
         }
         else {
-            int userId = getUserId(authentication);
+            int userId = userService.getUserId(authentication);
             Basket basket = basketService.getPurchaseByUserIdAndProductId(userId, productId);
             if (basket == null){
                 Basket newBasket = new Basket();
@@ -121,7 +106,6 @@ public class MainController {
             }
         }
     }
-
 
     @GetMapping("/signin")
     public String signIn() {
@@ -144,12 +128,6 @@ public class MainController {
         }
     }
 
-    /**
-     * Метод для проверки существования пользователя
-     * @param request Объект содержащий запрос, поступивший от пользователя
-     * @param username Имя пользователя
-     * @param password Пароль пользователя
-     */
     public void authWithHttpServletRequest(HttpServletRequest request, String username, String password) {
         try {
             request.login(username, password);
